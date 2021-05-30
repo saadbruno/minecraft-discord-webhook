@@ -4,7 +4,6 @@ RUN apk add --no-cache bash curl
 WORKDIR /app
 
 COPY minecraft-discord-webhook.sh .
+COPY ./lang ./lang
 
-ENV FOOTER_TEXT="Minecraft Server"
-
-CMD ["bash", "-c", "./minecraft-discord-webhook.sh $WEBHOOK_URL ./latest.log $FOOTER_TEXT"]
+CMD ["bash", "-c", "WEBHOOK_URL=$WEBHOOK_URL SERVERLOG=./latest.log LANGUAGE=$LANGUAGE FOOTER=$FOOTER ./minecraft-discord-webhook.sh $WEBHOOK_URL"]
