@@ -4,20 +4,20 @@
 # MIT License
 # Documentation available at: https://github.com/saadbruno/appendhook
 # Usage:
-#    WEBHOOK_URL=<discord webhook> SERVERLOG=</path/to/server/log/latest.log> FOOTER=<optional footer> LANGUAGE=<optional language> ./minecraft-discord.webook.sh
+#    WEBHOOK_URL=<discord webhook> SERVERLOG=</path/to/server/logs> FOOTER=<optional footer> LANGUAGE=<optional language> ./minecraft-discord.webook.sh
 # Also available via a Docker image, read the github repo for more information
 
 #let's check for required variables
 if [ -z "$WEBHOOK_URL" ]; then
     echo ":: WARNING: Missing arguments. USAGE:"
-    echo "   WEBHOOK_URL=<discord webhook> SERVERLOG=</path/to/server/log/latest.log> FOOTER=<optional footer> LANGUAGE=<optional language> ./minecraft-discord.webook.sh"
+    echo "   WEBHOOK_URL=<discord webhook> SERVERLOG=</path/to/server/logs> FOOTER=<optional footer> LANGUAGE=<optional language> ./minecraft-discord.webook.sh"
     echo ":: If you're using Docker, make sure you've set the WEBHOOK_URL environment variable"
     exit 1
 fi
 
-if [ ! -f "$SERVERLOG" ]; then
-    echo ":: WARNING: Couldn't find server log. Make sure $SERVERLOG exists. USAGE:"
-    echo "   WEBHOOK_URL=<discord webhook> SERVERLOG=</path/to/server/log/latest.log> FOOTER=<optional footer> LANGUAGE=<optional language> ./minecraft-discord.webook.sh"
+if [ ! -f "$SERVERLOG/latest.log" ]; then
+    echo ":: WARNING: Couldn't find server log. Make sure $SERVERLOG/latest.log exists. USAGE:"
+    echo "   WEBHOOK_URL=<discord webhook> SERVERLOG=</path/to/server/logs> FOOTER=<optional footer> LANGUAGE=<optional language> ./minecraft-discord.webook.sh"
     echo ":: If you're using Docker, make sure you mounted your server log to /app/latest.log with '-v /path/to/server/logs/latest.log:/app/latest.log:ro'"
     exit 1
 fi
@@ -38,7 +38,7 @@ echo "Starting webhooks script with the following info:"
 echo ":: Language: $LANGUAGE"
 echo ":: URL: $WEBHOOK_URL"
 echo ":: Footer: $FOOTER"
-echo ":: Server log: $SERVERLOG"
+echo ":: Server logs: $SERVERLOG/latest.log"
 echo "================================================="
 
 # compact version of the webhook
@@ -62,7 +62,7 @@ function webhook_compact() {
 }
 
 # actual loop with parsing of the log
-tail -n 0 -F $SERVERLOG | while read LINE; do
+tail -n 0 -F $SERVERLOG/latest.log | while read LINE; do
 
     case $LINE in
 
