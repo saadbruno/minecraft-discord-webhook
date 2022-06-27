@@ -1,2 +1,2 @@
-JOIN="$PLAYER a rejoint le serveur!"
+JOIN="$PLAYER a rejoint le serveur !"
 LEAVE="$PLAYER a quitté le serveur :("
