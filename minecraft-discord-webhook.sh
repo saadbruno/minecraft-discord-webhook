@@ -24,7 +24,7 @@ fi
 
 DIR=$(dirname $0)
 
-# cache forces minotar to guve us a new avatar every day, in case players change their skins
+# cache forces minotar to give us a new avatar every day, in case players change their skins
 CACHE=$(date +'%Y%m%d')
 
 # Let's default our language to english
@@ -48,6 +48,7 @@ function webhook_compact() {
         -d '{
                 "username": "Minecraft",
                 "avatar_url" : "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png",
+                "content": "'"$1"'",
                 "embeds": [{
                     "color": "'"$2"'",
                     "author": {
@@ -57,8 +58,8 @@ function webhook_compact() {
                     "footer": {
                         "text": "'"$FOOTER"'"
                     }
-                }
-            ]}' $WEBHOOK_URL
+                }]
+            }' $WEBHOOK_URL
 }
 
 # actual loop with parsing of the log
