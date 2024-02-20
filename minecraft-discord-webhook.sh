@@ -43,12 +43,11 @@ echo "================================================="
 
 # compact version of the webhook
 function webhook_compact() {
-    curl -H "Content-Type: application/json" \
+    curl --no-progress-meter -H "Content-Type: application/json" \
         -X POST \
         -d '{
                 "username": "Minecraft",
                 "avatar_url" : "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png",
-                "content": "'"$1"'",
                 "embeds": [{
                     "color": "'"$2"'",
                     "author": {
@@ -64,7 +63,6 @@ function webhook_compact() {
 
 # actual loop with parsing of the log
 tail -n 0 -F $SERVERLOG/latest.log | while read LINE; do
-
     case $LINE in
 
     # match for chat message. If it's chat, we catch it first so we don't trigger false positives later
@@ -101,6 +99,73 @@ tail -n 0 -F $SERVERLOG/latest.log | while read LINE; do
         source $LANGFILE
         echo "$PLAYER made an advancement! Sending webhook..."
         webhook_compact "$MESSAGE" 2842864 "https://minotar.net/helm/$PLAYER?v=$CACHE"
+        ;;
+
+    # Geyser main server messages
+    *main\/INFO\]*)
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        source $LANGFILE
+        echo "Geyser INFO-message. Sending webhook..."
+        webhook_compact "$MESSAGE" 3447003 "https://geysermc.org/img/icons/geyser.png"
+        ;;
+
+    # Geyser main server messages
+    *main\/WARN\]*)
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        source $LANGFILE
+        echo "Geyser WARN-message. Sending webhook..."
+        webhook_compact "$MESSAGE" 10366780 "https://geysermc.org/img/icons/geyser.png"
+        ;;
+
+    # Geyser client connect
+    *tried\ to\ connect*)
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        source $LANGFILE
+        echo "Geyser Connect-message. Sending webhook..."
+        webhook_compact "$MESSAGE" 3447003 "https://geysermc.org/img/icons/geyser.png"
+        ;;
+
+    # Geyser client with stored cred
+    *Using\ stored\ credentials*)
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        PLAYER=$(echo "$LINE" | rev | cut -d " " -f 1 | rev)
+        source $LANGFILE
+        echo "Geyser Cred-message. Sending webhook..."
+        webhook_compact "$MESSAGE" 3447003 "https://minotar.net/helm/$PLAYER?v=$CACHE"
+        ;;
+
+    # Geyser client successfully connected
+    *Player\ connected\ with\ username*)
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        PLAYER=$(echo "$LINE" | rev | cut -d " " -f 1 | rev)
+        source $LANGFILE
+        echo "Geyser Player-message. Sending webhook..."
+        webhook_compact "$MESSAGE" 3447003 "https://minotar.net/helm/$PLAYER?v=$CACHE"
+        ;;
+
+    # Geyser client proxied 
+    *has\ connected\ to\ remote* | has\ disconnected\ from\ remote )
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        PLAYER=$(echo "$MESSAGE" | cut -d " " -f 1)
+        source $LANGFILE
+        echo "Geyser Player-connected-message. Sending webhook..."
+        webhook_compact "$MESSAGE" 3447003 "https://minotar.net/helm/$PLAYER?v=$CACHE"
+        ;;
+
+    # Other Geyser server messages
+    *\/INFO\]*)
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        source $LANGFILE
+        echo "Geyser INFO-message #2. Sending webhook..."
+        webhook_compact "$MESSAGE" 3447003 "https://geysermc.org/img/icons/geyser.png"
+        ;;
+
+    # Other Geyser server messages
+    *\/WARN\]*)
+        MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        source $LANGFILE
+        echo "Geyser WARN-message #2. Sending webhook..."
+        webhook_compact "$MESSAGE" 10366780 "https://geysermc.org/img/icons/geyser.png"
         ;;
 
     esac
