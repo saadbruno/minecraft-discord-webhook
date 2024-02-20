@@ -61,6 +61,9 @@ function webhook_compact() {
             }' $WEBHOOK_URL
 }
 
+# send a message that the service has started
+webhook_compact "$0 started monitoring $SERVERLOG/latest.log" 9737364 "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png"
+
 # actual loop with parsing of the log
 tail -n 0 -F $SERVERLOG/latest.log | while read LINE; do
     case $LINE in
@@ -144,7 +147,7 @@ tail -n 0 -F $SERVERLOG/latest.log | while read LINE; do
         ;;
 
     # Geyser client proxied 
-    *has\ connected\ to\ remote* | has\ disconnected\ from\ remote )
+    *has\ connected\ to\ remote* | *has\ disconnected\ from\ remote* )
         MESSAGE=$(echo "$LINE" | cut -d "]" -f 2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
         PLAYER=$(echo "$MESSAGE" | cut -d " " -f 1)
         source $LANGFILE
