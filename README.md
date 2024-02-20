@@ -55,6 +55,9 @@ services:
 - LANGUAGE: The language of the notifications. This only supports joins and leaves. Advancements and death messages are posted "as is", meaning they'll be posted using the language of your server. Check the [lang directory](https://github.com/saadbruno/minecraft-discord-webhook/tree/main/lang) for currently supported languages. Contributions are welcome!
 - FOOTER: An optional footer text that will be included with the notifications, you can put your server name, server address or anything else. You can also ommit this for a more compact notification.
  ![image](https://user-images.githubusercontent.com/23201434/120119109-44cf5800-c16c-11eb-9ce1-8927629c805f.png)
+- AVATAR: URL of an image to use as the bot-avatar.  Defaults to https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png
+- BOTNAME: Name of the bot in the Discord channel. Defaults to "Minecraft"
+- PREVIEW: If set - will also add a preview of the message in the Discord channel
 
 ## Notes on logs
 
