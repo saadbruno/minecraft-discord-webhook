@@ -51,12 +51,16 @@ echo "================================================="
 
 # compact version of the webhook
 function webhook_compact() {
+    CONTENT=""
+    if [ "$PREVIEW" ]; then
+        CONTENT=$1
+    fi
     curl -H "Content-Type: application/json" \
         -X POST \
         -d '{
                 "username": "'"$BOTNAME"'",
                 "avatar_url" : "'"$AVATAR"'",
-                "content": "'"$1"'",
+                "content": "'"$CONTENT"'",
                 "embeds": [{
                     "color": "'"$2"'",
                     "author": {
