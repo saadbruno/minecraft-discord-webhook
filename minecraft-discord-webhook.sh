@@ -43,7 +43,7 @@ echo "================================================="
 
 # compact version of the webhook
 function webhook_compact() {
-    curl --no-progress-meter -H "Content-Type: application/json" \
+    curl -H "Content-Type: application/json" \
         -X POST \
         -d '{
                 "username": "Minecraft",
