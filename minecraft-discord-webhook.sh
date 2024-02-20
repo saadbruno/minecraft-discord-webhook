@@ -75,7 +75,7 @@ function webhook_compact() {
 }
 
 # send a message that the service has started
-webhook_compact "$0 started monitoring $SERVERLOG/latest.log" 9737364 "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png"
+webhook_compact "$0 started monitoring $SERVERLOG/latest.log" 9737364 "$AVATAR"
 
 # actual loop with parsing of the log
 tail -n 0 -F $SERVERLOG/latest.log | while read LINE; do
