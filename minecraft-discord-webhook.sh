@@ -48,6 +48,7 @@ function webhook_compact() {
         -d '{
                 "username": "Minecraft",
                 "avatar_url" : "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png",
+                "content": "'"$1"'",
                 "embeds": [{
                     "color": "'"$2"'",
                     "author": {
