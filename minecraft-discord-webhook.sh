@@ -32,6 +32,14 @@ if [ -z "$LANGUAGE" ]; then
     LANGUAGE="en-US"
 fi
 
+if [ -z "$BOTNAME" ]; then
+    BOTNAME="Minecraft"
+fi
+if [ -z "$AVATAR" ]; then
+    AVATAR="https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png"
+fi
+
+
 LANGFILE=$DIR/lang/$LANGUAGE.sh
 echo "================================================="
 echo "Starting webhooks script with the following info:"
@@ -46,8 +54,8 @@ function webhook_compact() {
     curl -H "Content-Type: application/json" \
         -X POST \
         -d '{
-                "username": "Minecraft",
-                "avatar_url" : "https://www.minecraft.net/etc.clientlibs/minecraft/clientlibs/main/resources/android-icon-192x192.png",
+                "username": "'"$BOTNAME"'",
+                "avatar_url" : "'"$AVATAR"'",
                 "content": "'"$1"'",
                 "embeds": [{
                     "color": "'"$2"'",
