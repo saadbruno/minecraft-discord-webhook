@@ -84,6 +84,9 @@ tail -n 0 -F $SERVERLOG/latest.log | while read LINE; do
     # match for chat message. If it's chat, we catch it first so we don't trigger false positives later
     *\<*\>*) echo "Chat message" ;;
 
+    # Consume any line that mentions a Villager so that we dont push their death through the webhook
+    *EntityVillager* ) echo "Skipping Villager death" ;;
+
     # joins and parts
     *joined\ the\ game)
         PLAYER=$(echo "$LINE" | grep -o ": .*" | awk '{print $2}')
